@@ -40,6 +40,12 @@ export function ValentineCard() {
     setIsOpen(!isOpen)
   }
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Initialize audio context and related code here
+    }
+  }, []);
+
   return (
     <>
       {/* Replace the sphere with proper lights */}
