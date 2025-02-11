@@ -10,6 +10,25 @@ export function ValentineCard() {
   const [isOpen, setIsOpen] = useState(false)
   const audioRef = useRef(null)
   const [cameraPosition] = useState(() => new THREE.Vector3(0, 0, 10))
+  const [cardText, setCardText] = useState({
+    to: 'To you',
+    message: "Happy Valentine's Day!\n\nI love you so much!"
+  })
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const to = params.get('to')
+      const message = params.get('message')
+
+      if (to || message) {
+        setCardText({
+          to: to || 'To you',
+          message: message || "Happy Valentine's Day!\n\nI love you so much!"
+        })
+      }
+    }
+  }, [])
 
   useFrame((state, delta) => {
     if (!groupRef.current) return
@@ -99,9 +118,7 @@ export function ValentineCard() {
             depthTest={true}
             renderOrder={1}
           >
-            To you,{'\n'}
-            Happy Valentine&apos;s Day!{'\n\n'}
-            I love you so much!
+            {cardText.to + ',\n' + cardText.message}
           </Text>
         </mesh>
 
