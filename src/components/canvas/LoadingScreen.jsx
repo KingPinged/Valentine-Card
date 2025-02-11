@@ -8,7 +8,7 @@ export default function LoadingScreen({ onComplete }) {
   const [showClick, setShowClick] = useState(false)
   useFrame((state, delta) => {
     if (progress < 1) {
-      setProgress((prev) => Math.min(prev + delta * 0.8, 1))
+      setProgress((prev) => Math.min(prev + delta, 1))
     }
   })
 

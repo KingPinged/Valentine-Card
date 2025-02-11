@@ -9,11 +9,26 @@ export function ValentineCard() {
   const backRef = useRef()
   const [isOpen, setIsOpen] = useState(false)
   const audioRef = useRef(null)
-  const [cameraPosition] = useState(() => new THREE.Vector3(0, 0, 10))
+  const [cameraPosition] = useState(() => {
+    // Check if we're on mobile (window width < 768px)
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+    return new THREE.Vector3(0, 0, isMobile ? 15 : 10)
+  })
   const [cardText, setCardText] = useState({
     to: 'To you',
     message: "Happy Valentine's Day!\n\nI love you so much!"
   })
+
+  // Add window resize handler
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 768
+      cameraPosition.z = isMobile ? 15 : 10
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [cameraPosition])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -49,8 +64,9 @@ export function ValentineCard() {
     // Card opening animation
     if (isOpen) {
       frontRef.current.rotation.y = THREE.MathUtils.lerp(frontRef.current.rotation.y, Math.PI / 2, 0.1)
-      state.camera.position.lerp(new THREE.Vector3(0, 0, 4), 0.05)
-
+      // Adjust camera zoom position for mobile when card is open
+      const targetZ = window.innerWidth < 768 ? 6 : 4
+      state.camera.position.lerp(new THREE.Vector3(0, 0, targetZ), 0.05)
     } else {
       frontRef.current.rotation.y = THREE.MathUtils.lerp(frontRef.current.rotation.y, 0, 0.1)
       state.camera.position.lerp(cameraPosition, 0.05)
