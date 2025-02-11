@@ -91,9 +91,9 @@ export function ValentineCard() {
             depthTest={true}
             renderOrder={1}
           >
-            With all my love,{'\n'}
+            To you,{'\n'}
             Happy Valentine&apos;s Day!{'\n\n'}
-            ❤️
+            I love you so much!
           </Text>
         </mesh>
 
