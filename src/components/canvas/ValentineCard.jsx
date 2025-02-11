@@ -21,7 +21,7 @@ export function ValentineCard() {
     message: "Happy Valentine's Day!\n\nI love you so much!"
   })
 
-  // Spring animation for entrance
+  // Adjusted spring animation for smoother completion
   const { position, rotation } = useSpring({
     from: {
       position: [0, 10, 0],
@@ -32,9 +32,12 @@ export function ValentineCard() {
       rotation: [0, 0, 0],
     },
     config: {
-      mass: 1,
-      tension: 280,
-      friction: 60,
+      mass: 2,
+      tension: 170,
+      friction: 26,
+      precision: 0.001,
+      velocity: 0,
+      clamp: false
     },
     onRest: () => setHasEntered(true),
   })
@@ -74,8 +77,12 @@ export function ValentineCard() {
     if (!isOpen) {
       groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, mouseX * 0.5, 0.1)
       groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -mouseY * 0.5, 0.1)
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime) * 0.1
+
+      if (hasEntered) {
+        groupRef.current.position.y = Math.sin(state.clock.elapsedTime) * 0.1
+      }
     }
+
 
     if (isOpen) {
       frontRef.current.rotation.y = THREE.MathUtils.lerp(frontRef.current.rotation.y, Math.PI / 2, 0.1)
@@ -85,6 +92,7 @@ export function ValentineCard() {
       frontRef.current.rotation.y = THREE.MathUtils.lerp(frontRef.current.rotation.y, 0, 0.1)
       state.camera.position.lerp(cameraPosition, 0.05)
     }
+
   })
 
   const handleClick = () => {

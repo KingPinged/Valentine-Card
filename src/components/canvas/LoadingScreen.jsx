@@ -52,7 +52,7 @@ export default function LoadingScreen({ onComplete }) {
           anchorY="middle"
           opacity={0.7}
         >
-          Click anywhere
+          Click anywhere. This site has Audio!
         </Text>
       )}
     </group>
