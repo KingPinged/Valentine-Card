@@ -1,24 +1,29 @@
 import { Text } from '@react-three/drei'
 import { useEffect, useRef, useState } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 export default function LoadingScreen({ onComplete }) {
   const [progress, setProgress] = useState(0)
   const [showClick, setShowClick] = useState(false)
-  useFrame((state, delta) => {
-    if (progress < 1) {
-      setProgress((prev) => Math.min(prev + delta * 0.5, 1))
-    }
-  })
 
   useEffect(() => {
-    if (progress >= 1) {
-      setTimeout(() => {
-        setShowClick(true)
-      }, 500)
+    // Create a loading manager to track all Three.js asset loading
+    const manager = new THREE.LoadingManager()
+
+    manager.onProgress = (url, itemsLoaded, itemsTotal) => {
+      const progressRatio = itemsLoaded / itemsTotal
+      setProgress(progressRatio)
+
+      if (progressRatio === 1) {
+        setTimeout(() => {
+          setShowClick(true)
+        }, 500)
+      }
     }
-  }, [progress])
+
+    // Set the global loading manager
+    THREE.DefaultLoadingManager = manager
+  }, [])
 
   const handleClick = () => {
     if (progress >= 1 && showClick && onComplete) {
