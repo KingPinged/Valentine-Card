@@ -8,6 +8,7 @@ export function ValentineCard() {
   const frontRef = useRef()
   const backRef = useRef()
   const [isOpen, setIsOpen] = useState(false)
+  const audioRef = useRef(null)
   const [cameraPosition] = useState(() => new THREE.Vector3(0, 0, 10))
 
   useFrame((state, delta) => {
@@ -30,6 +31,7 @@ export function ValentineCard() {
     if (isOpen) {
       frontRef.current.rotation.y = THREE.MathUtils.lerp(frontRef.current.rotation.y, Math.PI / 2, 0.1)
       state.camera.position.lerp(new THREE.Vector3(0, 0, 4), 0.05)
+
     } else {
       frontRef.current.rotation.y = THREE.MathUtils.lerp(frontRef.current.rotation.y, 0, 0.1)
       state.camera.position.lerp(cameraPosition, 0.05)
@@ -38,11 +40,17 @@ export function ValentineCard() {
 
   const handleClick = () => {
     setIsOpen(!isOpen)
+
+    if (audioRef.current) {
+      audioRef.current.play()
+    }
+
   }
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Initialize audio context and related code here
+      audioRef.current = new window.Audio('/flip.mp3')
+
     }
   }, []);
 
